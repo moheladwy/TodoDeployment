@@ -9,6 +9,7 @@
       - "8070:8070"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
   
   api:
     image: only1adwy/todo-api                                     
@@ -18,7 +19,7 @@
       - ASPNETCORE_ENVIRONMENT=Production
     deploy:
       mode: replicated
-      replicas: 1                                                 
+      replicas: 2                                                 
       update_config:
         parallelism: 1                                            
       restart_policy:
