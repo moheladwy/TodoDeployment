@@ -1,0 +1,15 @@
+services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    ports:
+      - "8000:8000"
+      - "9443:9443"
+    volumes:
+      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true" # Enable Watchtower to monitor this service
+
+volumes:
+  portainer_data:

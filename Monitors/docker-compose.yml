@@ -1,0 +1,12 @@
+services:
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock   # Required to monitor Docker
+    environment:
+      - WATCHTOWER_LABEL_ENABLE=true                # Enables labels for controlling which containers to watch
+    restart: always                                 # Ensures Watchtower restarts automatically
+    command:
+      - "--interval"
+      - "3600"                                      # Interval in seconds for checking updates
+      - "--rolling-restart"                         # Restart services in a rolling manner
