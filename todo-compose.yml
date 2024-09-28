@@ -24,6 +24,8 @@
         parallelism: 1                                            
       restart_policy:
         condition: on-failure                                     
+    depends_on:
+      - traefik
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.api.rule=Host(`13.50.56.110`)"

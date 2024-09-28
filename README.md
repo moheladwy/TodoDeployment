@@ -24,13 +24,9 @@ This project is a sample project to demonstrate how to deploy a Todo application
     - run the docker compose file for watchtower to monitor all the containers and update them if there is a new image.
     - run the docker compose file for the portainer to your host docker environment.
     - run the docker compose file for the Jenkins to setup the Jenkins environment and pipeline.
-    - run the docker compose file for the Todo API application and Traefik as a reverse proxy and load balancer 
-    (remember to change the domain name in the traefik configuration file to your domain name and the image name in the docker-compose file to your Docker Hub repository).
 ```
 
 5. Open your browser and navigate to `https://localhost:9443` to access the portainer and create a new user account then login.
-
-6. Remove any existing containers that is created by the docker compose file by going to the containers tab and click on the container then click on remove.
 
 7. Open your browser and navigate to `http://localhost:8090` to access the Jenkins:
 ```
@@ -48,6 +44,8 @@ This project is a sample project to demonstrate how to deploy a Todo application
     - Save the pipeline configuration.
     - Run the pipeline and it will build the Todo API Image and push it to the Docker Hub.
 ```
+7. Change the docker image name in the `todo-compose.yml` file to your Docker Hub repository.
+
 8. After the pipeline is finished, run the following command to start the Todo API application `docker-compose -f todo-compose.yml up -d`.
 
 9. After the pipeline is finished, watchtower will update the Todo API container with the new image after it is pushed to the Docker Hub.
