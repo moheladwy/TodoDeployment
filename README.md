@@ -136,8 +136,10 @@ You need to have the following software installed on your machine:
     - Add Docker Hub credentials to Jenkins.
     - Update the Jenkinsfile with your Docker Hub repository, save, and run the pipeline. This will build and push the Todo API image to Docker Hub.
 
-8. **Update Docker Image in `todo-compose.yml`:**
-   Modify the image name in the `todo-compose.yml` file to point to your Docker Hub repository.
+8. **Update The `todo-compose.yml` File:**
+
+   - Modify the image name in the `todo-compose.yml` file to point to your Docker Hub repository instead of `only1adwy/todo-api`.
+   - Modify the label "traefik.http.routers.api.rule=Host(`13.50.56.110`)" in the `todo-compose.yml` file to match your IP address.
 
 9. **Start the Todo API:**
 
