@@ -1,63 +1,162 @@
-# TodoDeployment
+# Complete Automated Pipeline Deployment
+
+## Table of Contents
+
+1. [Introduction](#introduction)
+2. [Pipeline Diagram](#pipeline-diagram)
+3. [Development Environment](#development-environment)
+    - [Source Code](#source-code)
+    - [Branch Protection](#branch-protection)
+    - [Linter Testing](#linter-testing)
+4. [Jenkins CI/CD Pipeline](#jenkins-ci-cd-pipeline)
+    - [Trigger Jenkins using GitHub Webhook](#trigger-jenkins-using-github-webhook)
+    - [Pull Source from GitHub](#pull-source-from-github)
+    - [Build Docker Image](#build-docker-image)
+    - [Push Docker Image to Docker Hub](#push-docker-image-to-docker-hub)
+5. [AWS EC2 Deployment](#aws-ec2-deployment)
+    - [Watchtower Monitoring](#watchtower-monitoring)
+    - [Rolling Update](#rolling-update)
+6. [Installation Guide](#installation-guide)
+    - [Prerequisites](#prerequisites)
+    - [Steps for Setup](#steps-for-setup)
+7. [License and Author](#license-and-author)
 
 ## Introduction
 
-This project is a sample project to demonstrate how to deploy a Todo application using Docker, Docker Compose, and Jenkins.
+This project demonstrates a complete automated deployment pipeline for a Todo application using Docker, Jenkins, and Docker Compose. It utilizes GitHub for version control, Jenkins for CI/CD, and AWS EC2 as the deployment environment.
 
-## Prerequisites
+## Pipeline Diagram
 
-- You need to have the following software installed on your machine:
-    - Git
-    - Docker
-    - Docker Compose
+The following diagram illustrates the complete CI/CD pipeline setup that involves source code management, Jenkins automation, Docker image building, and Watchtower monitoring:
 
-## Installation
+![Complete Automated Pipeline Deployment](Diagram/complete-automated-pipeline-deployment.svg)
 
-1. Clone the repository `git clone https://github.com/moheladwy/TodoDeployment.git Todo-Deployment`.
+## Development Environment
 
-2. Change directory to the project `cd Todo-Deployment`.
+### Source Code
 
-3. Run the following command to build the Docker image `chmod +x ./start-all.sh` to make the script executable.
+-   The source code is hosted in a GitHub repository, containing the application logic, infrastructure configuration, and other essential files.
 
-4. Run the following command to start the application `./start-all.sh` and it will do the following:
-```
-    - run the docker compose file for watchtower to monitor all the containers and update them if there is a new image.
-    - run the docker compose file for the portainer to your host docker environment.
-    - run the docker compose file for the Jenkins to setup the Jenkins environment and pipeline.
-```
+### Branch Protection
 
-5. Open your browser and navigate to `https://localhost:9443` to access the portainer and create a new user account then login.
+-   Branch protection policies ensure that only tested and reviewed code gets merged into the main branch.
 
-7. Open your browser and navigate to `http://localhost:8090` to access the Jenkins:
-```
-    - It will ask you for the secret key to unlock jenkins:
-      - you can get it by running the following command in the console of the jenkins-blueocean container that you can access by:
-      - going to the portainer and click on the Jenkins container then click on the console button and press connect: 
-      - run `cat /var/jenkins_home/secrets/initialAdminPassword`
-    - Copy the secret key and paste it in the Jenkins unlock page.
-    - Click on done and then install the suggested plugins.
-    - Create a new admin user and click on save and finish.
-    - Click on start using Jenkins.
-    - Create a new pipeline and configure it to use the Jenkinsfile in the repository `https://github.com/moheladwy/TodoFullstack.git`.
-    - Create a new credential to access you Docker Hub and add it to the Jenkins pipeline.
-    - Change the Docker Hub repository in the Jenkinsfile to your Docker Hub repository.
-    - Save the pipeline configuration.
-    - Run the pipeline and it will build the Todo API Image and push it to the Docker Hub.
-```
-7. Change the docker image name in the `todo-compose.yml` file to your Docker Hub repository.
+### Linter Testing
 
-8. After the pipeline is finished, run the following command to start the Todo API application `docker-compose -f todo-compose.yml up -d`.
+-   Linter testing ensures code quality by enforcing coding standards and identifying issues early in the development pipeline.
 
-9. After the pipeline is finished, watchtower will update the Todo API container with the new image after it is pushed to the Docker Hub.
+## Jenkins CI/CD Pipeline
 
-10. After the pipeline is finished, you can access the Todo API application by navigating to `https://localhost:8070/swagger/index.html` in your browser.
+### Trigger Jenkins using GitHub Webhook
 
-## License
+-   A GitHub webhook notifies Jenkins of any new commits, automatically triggering the build and deployment pipeline.
 
-This project is open source and available under the MIT License. You are free to use, modify, distribute, and learn from this code as you like.
+### Pull Source from GitHub
 
-## Author
+-   Jenkins pulls the latest code from the GitHub repository to ensure that it is using the most current version.
 
- - Mohamed Al-Adawy.
- - You can see my other projects on my [GitHub Profile](https://github.com/moheladwy), or [My Website](https://al-adawy.netlify.app/).
- - You can contact me on my [LinkedIn Profile](https://www.linkedin.com/in/mohamedhusseineladwy/).
+### Build Docker Image
+
+-   Jenkins builds a Docker image from the source code using the Dockerfile defined in the repository.
+
+### Push Docker Image to Docker Hub
+
+-   Jenkins logs into Docker Hub and pushes the built Docker image, making it available for deployment.
+
+## AWS EC2 Deployment
+
+### Watchtower Monitoring
+
+-   Watchtower monitors the Docker Hub repository for any updates to the Docker image, ensuring the deployment is always using the latest version.
+
+### Rolling Update
+
+-   When a new Docker image is detected, Watchtower updates the running containers using a rolling update strategy, minimizing downtime.
+
+## Installation Guide
+
+### Prerequisites
+
+You need to have the following software installed on your machine:
+
+-   Git
+-   Docker
+-   Docker Compose
+
+### Steps for Setup
+
+1. **Clone the Repository:**
+
+    ```bash
+    git clone https://github.com/moheladwy/TodoDeployment.git Todo-Deployment
+    ```
+
+2. **Navigate to the Project Directory:**
+
+    ```bash
+    cd Todo-Deployment
+    ```
+
+3. **Make the Script Executable:**
+
+    ```bash
+    chmod +x ./start-all.sh
+    ```
+
+4. **Start the Application:**
+   Run the startup script to:
+
+    - Launch Watchtower to monitor container updates.
+    - Start Portainer for Docker environment management.
+    - Set up Jenkins for CI/CD automation.
+
+    ```bash
+    ./start-all.sh
+    ```
+
+5. **Access Portainer:**
+   Open your browser and navigate to `https://localhost:9443` to access Portainer. Create a new user account and log in.
+
+6. **Access Jenkins:**
+   Navigate to `http://localhost:8090` to access Jenkins. Unlock Jenkins by following these steps:
+
+    - Open the console of the Jenkins container in Portainer.
+    - Retrieve the secret key:
+
+    ```bash
+    cat /var/jenkins_home/secrets/initialAdminPassword
+    ```
+
+    - Use the key to unlock Jenkins, install the suggested plugins, and create a new admin user.
+
+7. **Set Up Jenkins Pipeline:**
+
+    - Create a new pipeline and configure it to use the Jenkinsfile from the repository:
+      `https://github.com/moheladwy/TodoFullstack.git`.
+    - Add Docker Hub credentials to Jenkins.
+    - Update the Jenkinsfile with your Docker Hub repository, save, and run the pipeline. This will build and push the Todo API image to Docker Hub.
+
+8. **Update Docker Image in `todo-compose.yml`:**
+   Modify the image name in the `todo-compose.yml` file to point to your Docker Hub repository.
+
+9. **Start the Todo API:**
+
+    ```bash
+    docker-compose -f todo-compose.yml up -d
+    ```
+
+10. **Monitor with Watchtower:**
+    Watchtower will automatically update the Todo API container with the latest image once it is pushed to Docker Hub.
+
+11. **Access the Todo API:**
+    Open your browser and navigate to `https://localhost:8070/swagger/index.html` to access the Todo API.
+
+## License and Author
+
+This project is licensed under the MIT License. Feel free to use, modify, and distribute the code as needed.
+
+**Author: Mohamed Al-Adawy**
+
+-   GitHub: [https://github.com/moheladwy](https://github.com/moheladwy)
+-   Website: [https://al-adawy.netlify.app](https://al-adawy.netlify.app)
+-   LinkedIn: [https://www.linkedin.com/in/mohamedhusseineladwy](https://www.linkedin.com/in/mohamedhusseineladwy)
