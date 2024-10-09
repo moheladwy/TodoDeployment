@@ -139,7 +139,6 @@ You need to have the following software installed on your machine:
 8. **Update The `todo-compose.yml` File:**
 
    - Modify the image name in the `todo-compose.yml` file to point to your Docker Hub repository instead of `only1adwy/todo-api`.
-   - Modify the label "traefik.http.routers.api.rule=Host(`13.50.56.110`)" in the `todo-compose.yml` file to match your IP address.
 
 9. **Start the Todo API:**
 
@@ -151,11 +150,11 @@ You need to have the following software installed on your machine:
     Watchtower will automatically update the Todo API container with the latest image once it is pushed to Docker Hub.
 
 11. **Access the Todo API:**
-    Open your browser and navigate to `https://localhost:8070/swagger/index.html` to access the Todo API.
+    Open your browser and navigate to `http://localhost:8070/swagger/index.html` to access the Todo API.
 
 ## License and Author
 
-This project is licensed under the MIT License. Feel free to use, modify, and distribute the code as needed.
+This project is open source, feel free to use, modify, and distribute the code as needed. If you have any questions or suggestions, please feel free to reach out.
 
 **Author: Mohamed Al-Adawy**
 
