@@ -1,42 +1,33 @@
 ﻿services:
-  traefik:
-    image: traefik:v3.1
-    container_name: traefik-reverse-proxy
-    command:
-      - "--providers.docker"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:8070"
-    ports:
-      - "8070:8070"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    restart: always
-  
-  api:
-    image: only1adwy/todo-api                                     
-    volumes:
-      - sqlite-volume:/TodoAPI/Database
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-    deploy:
-      mode: replicated
-      replicas: 2                                                 
-      update_config:
-        parallelism: 1                                            
-      restart_policy:
-        condition: on-failure                                     
-    depends_on:
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`13.50.56.110`)"
-      - "traefik.http.routers.api.entrypoints=web"
-      - "traefik.http.services.api.loadbalancer.server.port=8080"
-      - "com.centurylinklabs.watchtower.enable=true"     
+    api:
+        image: only1adwy/todo-api:latest
+        volumes:
+            - sqlite-volume:/TodoAPI/Database
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+        deploy:
+            mode: replicated
+            replicas: 2
+            update_config:
+                parallelism: 1
+            restart_policy:
+                condition: on-failure
+
+    nginx:
+        image: nginx:alpine
+        container_name: nginx_reverse_proxy
+        ports:
+            - "8070:8070"
+        volumes:
+            - ./conf.d:/etc/nginx/conf.d
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+        depends_on:
+            - api
 
 volumes:
-  sqlite-volume:                                                  
+    sqlite-volume:
 
 networks:
-  default:
-    driver: bridge
+    default:
+        driver: bridge
+        name: todo-network
