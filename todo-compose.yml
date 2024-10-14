@@ -30,6 +30,7 @@
 
 volumes:
     sqlite-volume:
+      name: todo-sqlite-volume
 
 networks:
     default:
