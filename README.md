@@ -4,22 +4,23 @@
 
 1. [Introduction](#introduction)
 2. [Pipeline Diagram](#pipeline-diagram)
-3. [Development Environment](#development-environment)
+3. [Reverse Proxy and Load Balancer Diagram](#reverse-proxy-and-load-balancer-diagram)
+4. [Development Environment](#development-environment)
     - [Source Code](#source-code)
     - [Branch Protection](#branch-protection)
     - [Linter Testing](#linter-testing)
-4. [Jenkins CI/CD Pipeline](#jenkins-ci-cd-pipeline)
+5. [Jenkins CI/CD Pipeline](#jenkins-ci-cd-pipeline)
     - [Trigger Jenkins using GitHub Webhook](#trigger-jenkins-using-github-webhook)
     - [Pull Source from GitHub](#pull-source-from-github)
     - [Build Docker Image](#build-docker-image)
     - [Push Docker Image to Docker Hub](#push-docker-image-to-docker-hub)
-5. [AWS EC2 Deployment](#aws-ec2-deployment)
+6. [AWS EC2 Deployment](#aws-ec2-deployment)
     - [Watchtower Monitoring](#watchtower-monitoring)
     - [Rolling Update](#rolling-update)
-6. [Installation Guide](#installation-guide)
+7. [Installation Guide](#installation-guide)
     - [Prerequisites](#prerequisites)
     - [Steps for Setup](#steps-for-setup)
-7. [License and Author](#license-and-author)
+8. [License and Author](#license-and-author)
 
 ## Introduction
 
@@ -30,6 +31,12 @@ This project demonstrates a complete automated deployment pipeline for a Todo ap
 The following diagram illustrates the complete CI/CD pipeline setup that involves source code management, Jenkins automation, Docker image building, and Watchtower monitoring:
 
 ![Complete Automated Pipeline Deployment](Diagram/complete-automated-pipeline-deployment.svg)
+
+## Reverse Proxy and Load Balancer Diagram
+
+The following diagram illustrates the setup of a reverse proxy and load balancer using Nginx to route traffic to multiple services of the Todo api:
+
+![Reverse Proxy and Load Balancer](Diagram/reverse-proxy-and-load-balaner.svg)
 
 ## Development Environment
 
@@ -138,7 +145,7 @@ You need to have the following software installed on your machine:
 
 8. **Update The `todo-compose.yml` File:**
 
-   - Modify the image name in the `todo-compose.yml` file to point to your Docker Hub repository instead of `only1adwy/todo-api`.
+    - Modify the image name in the `todo-compose.yml` file to point to your Docker Hub repository instead of `only1adwy/todo-api`.
 
 9. **Start the Todo API:**
 
